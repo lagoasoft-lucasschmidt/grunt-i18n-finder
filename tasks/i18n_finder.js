@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 				var localStats = i18nFinder(filePath, options);
 				if(_.isObject(localStats)){
 					_.each(_.keys(localStats), function(language){
-						grunt.log.ok("On file="+filePath+" and lang="+language+" found "+localStats[language].found+" resources, added "+localStats[language].added+" resources!");
+						grunt.log.ok("On file="+filePath+" and lang="+language+" scanned "+localStats[language].found+" resources, added "+localStats[language].added+" resources!");
 						if(!_.has(globalStats, language)){
 							globalStats[language] = {added:0, found:0};
 						}
@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 		//log stats
 		if(_.isObject(globalStats)){
 			_.each(_.keys(globalStats), function(language){
-				grunt.log.ok("Globally on lang="+language+" found "+globalStats[language].found+" resources, added "+globalStats[language].added+" resources!");
+				grunt.log.ok("Globally on lang="+language+" scanned "+globalStats[language].found+" resources, added "+globalStats[language].added+" resources!");
 			});
 		}
 	});

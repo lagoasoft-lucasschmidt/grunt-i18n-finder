@@ -125,5 +125,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Most code is written in coffe-script, so, use Grunt to compile. The task is written in Javascript.
 
 ## Release History
-0.0.1 - First Version, Support for __() expressions built in.
-0.0.2 - Improved Stats, now they are logged in grunt output
+* 0.0.3 - Improved Detection of __("Resource"), now checks for spaces between ( and " ...
+* 0.0.2 - Improved Stats, now they are logged in grunt output
+* 0.0.1 - First Version, Support for __() expressions built in.

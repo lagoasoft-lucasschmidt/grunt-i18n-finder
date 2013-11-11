@@ -2,15 +2,22 @@ _ = require 'underscore'
 _s = require 'underscore.string'
 
 DEFAULT_PATTERN = ///
-	\_\_\( # find Expression call
+	\_\_\(\s* # find Expression call
 	(
 	(\".*\") # the content
 	| # OR
 	(\'.*\') # the content
 	)
-	\)
+	\s*\)
 ///g
 
+REPLACE_LEFT_PATTERN = ///
+\_\_\(\s*[\"\']
+///
+
+REPLACE_RIGHT_PATTERN = ///
+[\"\']\s*\)
+///
 
 
 
@@ -25,16 +32,7 @@ module.exports = (fileContent, options)->
 	if _.isArray(results)
 		return _.map results, (result)->
 			debug "original=#{result}"
-			if _s.startsWith(result, "__(\"")
-				partial = _s.strRight(result, "__(\"")
-				debug "partial=#{partial}"
-				toReturn = _s.strLeft(partial, "\")")
-				debug "toReturn=#{toReturn}\n"
-				return toReturn
-			else
-				partial = _s.strRight(result, "__('")
-				debug "partial=#{partial}"
-				toReturn = _s.strLeft(partial, "')")
-				debug "toReturn=#{toReturn}\n"
-				return toReturn
+			toReturn = result.replace(REPLACE_LEFT_PATTERN, "").replace(REPLACE_RIGHT_PATTERN, "")
+			debug "toReturn=#{toReturn}"
+			return toReturn
 	return null

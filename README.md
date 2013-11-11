@@ -1,6 +1,6 @@
 # grunt-i18n-finder
 
-> Looks into files for references to i18n function calls. If found, verifies if all resource files contains entries for them. If not, a new entry is created. See https://github.com/mashpie/i18n-node 
+> Looks into files for references to i18n function calls. If found, verifies if all resource files contains entries for them. If not, a new entry is created. See https://github.com/mashpie/i18n-node
 
 > Eg: If you have a jade Template, or any other file ...
 
@@ -15,10 +15,10 @@ h1 !{__('This is a resource')}
 
 }
 ```
-> You can use this tool, to, search all your source files (jade, js, coffee ...), for references to the i18n library. The tool will, based on all configured languages, create or update all language files and add the resources missing. 
+> You can use this tool, to, search all your source files (jade, js, coffee ...), for references to the i18n library. The tool will, based on all configured languages, create or update all language files and add the resources missing.
 
 
-> This is usefull since, you wont need to add new resources manually to the language files, or to wait for the library to add them for you there. 
+> This is usefull since, you wont need to add new resources manually to the language files, or to wait for the library to add them for you there.
 
 > The implementation that detects the resources into files is very basic, so, based on what you do, you might want to modify that by implementing a function and passing as the options.findExpressions fileContent, options
 
@@ -66,7 +66,7 @@ Default value:
 
 You can implement this function, that receives two arguments: fileContent as String, and options.
 
-This function must return an array of Strings, where each String represents a resource key. 
+This function must return an array of Strings, where each String represents a resource key.
 
 #### options.write
 Type: `Boolean`
@@ -126,3 +126,4 @@ Most code is written in coffe-script, so, use Grunt to compile. The task is writ
 
 ## Release History
 0.0.1 - First Version, Support for __() expressions built in.
+0.0.2 - Improved Stats, now they are logged in grunt output

@@ -23,6 +23,7 @@ module.exports = function(grunt) {
 			grunt.log.writeln(text);
 		};
 
+		var globalStats = {};
 		// Iterate over all specified file groups.
 		this.files.forEach(function(f) {
 			options.translationFolder = f.dest;
@@ -31,10 +32,25 @@ module.exports = function(grunt) {
 				if(_.isString(f.cwd)){
 					filePath = path.join(f.cwd, filePath);
 				}
-				grunt.log.writeln('Analyzing file '+filePath+' with results output on '+options.translationFolder);
-				i18nFinder(filePath, options);
+				var localStats = i18nFinder(filePath, options);
+				if(_.isObject(localStats)){
+					_.each(_.keys(localStats), function(language){
+						grunt.log.ok("On file="+filePath+" and lang="+language+" found "+localStats[language].found+" resources, added "+localStats[language].added+" resources!");
+						if(!_.has(globalStats, language)){
+							globalStats[language] = {added:0, found:0};
+						}
+						globalStats[language].found = globalStats[language].found + localStats[language].found;
+						globalStats[language].added = globalStats[language].added + localStats[language].added;
+					});
+				}
 			});
 		});
+		//log stats
+		if(_.isObject(globalStats)){
+			_.each(_.keys(globalStats), function(language){
+				grunt.log.ok("Globally on lang="+language+" found "+globalStats[language].found+" resources, added "+globalStats[language].added+" resources!");
+			});
+		}
 	});
 
 };

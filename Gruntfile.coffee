@@ -33,7 +33,7 @@ module.exports = (grunt) ->
 		# Configuration to be run (and then tested).
 		i18n_finder:
 			default_options:
-				options: {}
+				options: {debug:true}
 				cwd: 'test/fixtures/'
 				src: ['**/*.coffee']
 				dest: 'tmp'

@@ -19,6 +19,12 @@ module.exports = (filePath, options={}, cb)->
 
 	debug "Trying to find i18n references into file #{filePath} with options #{JSON.stringify(options)}\n"
 
+	stats = {}
+
+	exit = ->
+		debug("Stats for file #{filePath} are #{JSON.stringify(stats)}")
+		if _.isFunction(cb) then return cb(stats) else return stats
+
 	content = fs.readFileSync(filePath)
 
 	if _.isFunction(options.findExpressions)
@@ -28,14 +34,14 @@ module.exports = (filePath, options={}, cb)->
 
 	debug("Found="+JSON.stringify(resources))
 
-	if !_.isArray(resources)
-		if _.isFunction(cb) then return cb() else return
+	if !_.isArray(resources) then return exit()
 
 	if !_.isString(translationFolder)
 		warn("Translation folder is not set")
-		if _.isFunction(cb) then return cb() else return
+		if _.isFunction(cb) then return exit()
 
 	for language in supportedLanguages
+		stats[language] = {found:0, added:0}
 		debug("Trying to save found results into language file for lang="+language)
 		languagePath = path.join translationFolder, language+translationExtension
 		debug("File for language has path #{languagePath}")
@@ -49,12 +55,14 @@ module.exports = (filePath, options={}, cb)->
 			catch e
 				warn("Error during read of JSON file #{languagePath}", e)
 
-		for resource in resources
+		for resource in _.uniq(resources)
+			stats[language].found++
 			if _.has(languageJSON, resource)
 				debug("Lang #{language} already has resource=#{resource}")
 			else
 				debug("Lang #{language} doesnt have resource=#{resource}")
 				languageJSON[resource] = resource
+				stats[language].added++
 
 		if options.write
 			debug("Will try to write lang #{language} file")
@@ -63,4 +71,4 @@ module.exports = (filePath, options={}, cb)->
 		else
 			debug("Wont write lang #{language} since write is off")
 
-	if _.isFunction(cb) then return cb() else return
+	return exit()

@@ -1,7 +1,7 @@
 {
   "name": "grunt-i18n-finder",
   "description": "Looks into files for references to i18n function calls. If found, verifies if all resource files contains entries for them. If not, a new entry is created.",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "homepage": "https://github.com/lucastschmidt/grunt-i18n-finder",
   "author": {
     "name": "Lucas Schmidt",

@@ -2,22 +2,17 @@ _ = require 'underscore'
 _s = require 'underscore.string'
 
 DEFAULT_PATTERN = ///
-	\_\_\(\s* # find Expression call
+	\_\_\( # find Expression call
+	\s* # ignore whitespace
 	(
-	(\".*\") # the content
+	(\"(.*)\") # the content
 	| # OR
-	(\'.*\') # the content
+	(\'(.*)\') # the content
 	)
-	\s*\)
+	\s* # ignore whitespace
+	[\),] # ends with ')' or ','' if it has parameters
 ///g
 
-REPLACE_LEFT_PATTERN = ///
-\_\_\(\s*[\"\']
-///
-
-REPLACE_RIGHT_PATTERN = ///
-[\"\']\s*\)
-///
 
 
 
@@ -28,11 +23,14 @@ module.exports = (fileContent, options)->
 	pattern = options?.pattern or DEFAULT_PATTERN
 	if !_.isRegExp(pattern) then throw new Error("Pattern must be a regex expr")
 
-	results = fileContent.match(pattern)
-	if _.isArray(results)
-		return _.map results, (result)->
-			debug "original=#{result}"
-			toReturn = result.replace(REPLACE_LEFT_PATTERN, "").replace(REPLACE_RIGHT_PATTERN, "")
-			debug "toReturn=#{toReturn}"
-			return toReturn
-	return null
+	pattern = new RegExp(pattern)
+
+	results = []
+	match = pattern.exec fileContent
+	while match?
+		for m in match
+			debug JSON.stringify(m)
+		if _.isArray(match) and match.length > 0 then results.push match[match.length - 1]
+		match = pattern.exec fileContent
+
+	return results
